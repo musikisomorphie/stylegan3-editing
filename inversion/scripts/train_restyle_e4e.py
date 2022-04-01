@@ -1,8 +1,7 @@
 import json
 import pprint
 import sys
-from plistlib import Dict
-from typing import Any
+from typing import Any, Dict
 
 import dataclasses
 import pyrallis
