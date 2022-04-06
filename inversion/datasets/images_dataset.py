@@ -20,8 +20,8 @@ class ImagesDataset(Dataset):
 		from_path = self.source_paths[index]
 		to_path = self.target_paths[index]
 
-		from_im = Image.open(from_path).convert('RGB')
-		to_im = Image.open(to_path).convert('RGB')
+		from_im = Image.open(from_path).resize((256,256))
+		to_im = Image.open(to_path).resize((256,256))
 
 		if self.target_transform:
 			to_im = self.target_transform(to_im)
