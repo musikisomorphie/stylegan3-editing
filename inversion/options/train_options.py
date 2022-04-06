@@ -16,6 +16,8 @@ class TrainOptions:
     dataset_type: str = "ffhq_encode"
     # Which encoder to use
     encoder_type: str = "BackboneEncoder"
+    # Which decoder to use
+    decoder_type: str = "Style2"
     # Number of input image channels to the ReStyl encoder. Should be set to 6
     input_nc: int = 6
     # Output resolution of the generator
