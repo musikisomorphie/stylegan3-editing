@@ -17,11 +17,11 @@ DATASETS = {
         'test_source_root': dataset_paths['ham10k'],
         'test_target_root': dataset_paths['ham10k'],
     },
-    'rxrx1': {
+    'rxrx19b': {
         'transforms': transforms_config.MedTransforms,
-        'train_source_root': dataset_paths['rxrx1'],
-        'train_target_root': dataset_paths['rxrx1'],
-        'test_source_root': dataset_paths['rxrx1'],
-        'test_target_root': dataset_paths['rxrx1'],
+        'train_source_root': dataset_paths['rxrx19b'],
+        'train_target_root': dataset_paths['rxrx19b'],
+        'test_source_root': dataset_paths['rxrx19b'],
+        'test_target_root': dataset_paths['rxrx19b'],
     }
 }

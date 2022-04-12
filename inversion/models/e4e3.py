@@ -1,3 +1,4 @@
+import math
 import torch
 from torch import nn
 
@@ -5,6 +6,7 @@ from configs.paths_config import model_paths
 from inversion.models.encoders import restyle_e4e_encoders
 from models.stylegan3.model import SG3Generator
 from utils import common
+from utils.data_utils import linspace
 
 
 class e4e(nn.Module):
@@ -13,6 +15,7 @@ class e4e(nn.Module):
         super(e4e, self).__init__()
         self.set_opts(opts)
         # Define architecture
+        self.img_chn = 6 if 'rxrx19b' in self.opts.dataset_type else 3
         self.n_styles = 16
         self.encoder = self.set_encoder()
         self.face_pool = torch.nn.AdaptiveAvgPool2d((256, 256))
@@ -33,17 +36,17 @@ class e4e(nn.Module):
             print(f'Loading ReStyle e4e from checkpoint: {self.opts.checkpoint_path}')
             ckpt = torch.load(self.opts.checkpoint_path, map_location='cpu')
             self.encoder.load_state_dict(self._get_keys(ckpt, 'encoder'), strict=True)
-            self.decoder = SG3Generator(checkpoint_path=None).decoder
+            self.decoder = SG3Generator(checkpoint_path=None, chn=self.img_chn).decoder
             self.decoder.load_state_dict(self._get_keys(ckpt, 'decoder', remove=["synthesis.input.transform"]), strict=False)
             self._load_latent_avg(ckpt)
         else:
             encoder_ckpt = self._get_encoder_checkpoint()
             self.encoder.load_state_dict(encoder_ckpt, strict=False)
-            self.decoder = SG3Generator(checkpoint_path=self.opts.stylegan_weights).decoder.cuda()
+            self.decoder = SG3Generator(checkpoint_path=self.opts.stylegan_weights, chn=self.img_chn).decoder.cuda()
             self.latent_avg = self.decoder.mapping.w_avg
 
-    def forward(self, x, latent=None, resize=True, input_code=False, landmarks_transform=None,
-                return_latents=False, return_aligned_and_unaligned=False):
+    def forward(self, x, latent=None, resize=False, input_code=False, landmarks_transform=None,
+                return_latents=False, return_aligned_and_unaligned=False, interp=False):
 
         images, unaligned_images = None, None
 
@@ -58,6 +61,11 @@ class e4e(nn.Module):
             else:
                 # first iteration is with respect to the avg latent code
                 codes = codes + self.latent_avg.repeat(codes.shape[0], 1, 1)
+
+        if interp:
+            codes = linspace(codes[0],
+                             codes[1],
+                             codes.shape[0])
 
         # generate the aligned images
         identity_transform = common.get_identity_transform()

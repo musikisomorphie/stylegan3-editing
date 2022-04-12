@@ -36,12 +36,15 @@ def generate_random_transform(translate=0.3, rotate=25):
     return user_transforms
 
 
-def tensor2im(var: torch.tensor):
+def tensor2im(var: torch.tensor, alpha=2, beta=0):
     var = var.cpu().detach().transpose(0, 2).transpose(0, 1).numpy()
     var = ((var + 1) / 2)
     var[var < 0] = 0
     var[var > 1] = 1
     var = var * 255
+    if var.shape[1] != var.shape[0]:
+        var = alpha * var + beta
+        var = np.clip(var, 0, 255)
     return Image.fromarray(var.astype('uint8'))
 
 

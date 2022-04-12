@@ -7,8 +7,8 @@ dataset_paths = {
     'ffhq': Path(''),
     'ffhq_unaligned': Path(''),
 
-    'ham10k': Path('/home/jwu/Data/non_IID/preproc/ham10k/images'),
-    'rxrx1': Path('/home/jwu/Data/non_IID/preproc/rxrx1/images')
+    'ham10k': Path('Data/non_IID/preproc/ham10k_tiny/images'),
+    'rxrx19b': Path('Data/non_IID/preproc/rxrx19b_cell/images')
 }
 
 model_paths = {
@@ -28,7 +28,8 @@ model_paths = {
     'mtcnn_onet': Path('pretrained_models/mtcnn/onet.npy'),
     # classifiers used for interfacegan training
     'age_estimator': Path('pretrained_models/dex_age_classifier.pth'),
-    'pose_estimator': Path('pretrained_models/hopenet_robust_alpha1.pkl')
+    'pose_estimator': Path('pretrained_models/hopenet_robust_alpha1.pkl'),
+    'moco': Path('pretrained_models/moco_v2_800ep_pretrain.pt')
 }
 
 styleclip_directions = {

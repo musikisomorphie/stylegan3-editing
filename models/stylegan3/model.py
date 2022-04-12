@@ -18,7 +18,7 @@ class GeneratorType(str, Enum):
 
 class SG3Generator(torch.nn.Module):
 
-    def __init__(self, checkpoint_path: Optional[Path] = None, res: int = 1024, config: str = None):
+    def __init__(self, checkpoint_path: Optional[Path] = None, chn: int = 3, res: int = 128, config: str = None):
         super(SG3Generator, self).__init__()
         print(f"Loading StyleGAN3 generator from path: {checkpoint_path}")
         if str(checkpoint_path).endswith("pkl"):
@@ -32,7 +32,8 @@ class SG3Generator(torch.nn.Module):
                 c_dim=0,
                 w_dim=512,
                 img_resolution=res,
-                img_channels=3,
+                img_channels=chn,
+                num_layers=10,
                 channel_base=32768,
                 channel_max=512,
                 magnitude_ema_beta=0.9988915792636801,
@@ -43,15 +44,16 @@ class SG3Generator(torch.nn.Module):
                                      c_dim=0,
                                      w_dim=512,
                                      img_resolution=res,
-                                     img_channels=3,
-                                     channel_base=65536,
-                                     channel_max=1024,
-                                     conv_kernel=1,
+                                     img_channels=chn,
+                                     channel_base=32768,
+                                     channel_max=512,
+                                     conv_kernel=3,
                                      filter_size=6,
                                      magnitude_ema_beta=0.9988915792636801,
                                      output_scale=0.25,
-                                     use_radial_filters=True
+                                     use_radial_filters=False
                                      ).cuda()
+            print(self.decoder)
         if checkpoint_path is not None:
             self._load_checkpoint(checkpoint_path)
         print('Done!')

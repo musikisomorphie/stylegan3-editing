@@ -58,7 +58,7 @@ class ResNetBackboneEncoder(Module):
     def __init__(self, n_styles=18, opts=None):
         super(ResNetBackboneEncoder, self).__init__()
 
-        self.conv1 = nn.Conv2d(opts.input_nc, 64, kernel_size=7, stride=2, padding=3, bias=False)
+        self.conv1 = nn.Conv2d(opts.input_nc, 64, kernel_size=7, stride=1, padding=3, bias=False)
         self.bn1 = BatchNorm2d(64)
         self.relu = PReLU(64)
 
